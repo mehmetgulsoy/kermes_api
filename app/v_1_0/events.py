@@ -5,7 +5,7 @@ import logging
 from flask import session, escape, g, jsonify
 from flask_socketio import emit, join_room, leave_room
 from flask_login import LoginManager, login_user, current_user, UserMixin
-from .. import socketio
+from .. import socketio, bcrypt
 from .db import get_db,query_db, execute_db
 
 @socketio.on('connect')
@@ -36,7 +36,10 @@ def kayit(json):
       param = json.get('firma'),json.get('unvan',''),json.get('eposta',''),json.get('telefon','')
       con.execute('INSERT INTO "FIRMA" (firma,unvan,eposta,telefon) VALUES (?,?,?,?)',param)
 
-      param = json.get('adi'),json.get('sifre',''),json.get('firma'),'ADMIN'
+      sifre = json.get('sifre','')
+      sifre_ozet = bcrypt.generate_password_hash(sifre).decode('utf-8')
+      
+      param = json.get('adi'),sifre_ozet ,json.get('firma'),'ADMIN'
       con.execute('INSERT INTO "UYE" (uye,sifre,firma,yetki) VALUES (?,?,?,?)',param)
 
     msg.append("Hesap başarıyla oluşturuldu. Lütfen Giriş Yap'ı tıklayın")

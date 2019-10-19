@@ -93,7 +93,7 @@ docs/_build/
 target/
 
 #VS Code
-.vscode
+.vscode/
 
 # Jupyter Notebook
 .ipynb_checkpoints

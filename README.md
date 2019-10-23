@@ -1,1 +1,5 @@
-email: mehmet@liman.com.tr
+<<<<<<< HEAD
+email: m.mehmetgulsoy@gmail.com
+=======
+email: m.mehmetgulsoy@gmail.com
+>>>>>>> devel

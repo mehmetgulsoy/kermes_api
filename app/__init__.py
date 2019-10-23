@@ -4,6 +4,7 @@ from flask_socketio import SocketIO
 from flask_bcrypt import Bcrypt 
 from flask_login import LoginManager
 from config import Config
+from flask_cors import CORS
 
 socketio = SocketIO()
 login_manager = LoginManager()
@@ -13,7 +14,7 @@ def create_app(config_class=Config):
   """Flask uygulaması oluşturur."""
   app = Flask(__name__)
   app.config.from_object(config_class)
-
+  CORS(app)
   bcrypt.init_app(app)
   login_manager.init_app(app) 
  

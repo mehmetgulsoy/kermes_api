@@ -1,4 +1,4 @@
-from flask import request, render_template
+from flask import request, render_template ,jsonify
 from flask_login import LoginManager, login_user, current_user, logout_user
 from . import main
 from .model import Uye
@@ -9,32 +9,27 @@ def index():
   return render_template('index.html')
 
 
-@main.route('/login', methods=["POST"])
+@main.route('/login', methods=["POST","GET"])
 def login():
-  error = False
-  msg  = ''
-
   if current_user.is_authenticated:
-      return None    
+      return {'error': True, 'msg': 'Uye zaten login!'}   
 
-  uye, firma = str.split(request.values.get('uye',''),'@')
-  sifre = request.values.get('sifre','')
+  rq = request.get_json(force=True,silent=True)
+  if rq['uye'].find('@') == -1:
+    return {'error': True, 'msg': 'uye@firma formatında olmalı!'}   
+
+  uye, firma = str.split(rq['uye'],'@')
+  sifre = rq['sifre']
 
   if uye == '' or firma == '' or sifre == '' :
-    return None    
-
-  res = query_db('SELECT * FROM "uye" where uye = ? and firma = ?',(uye,firma), True)
-  if res is None:
-    return None
+    return {'error': True, 'msg': 'Kullacıcı adı ve/veya şifre giriniz!'}    
     
-  uye = Uye(res['no'],'dfd','fdfdf')
+  uye = Uye.fromFirmaUye(firma,uye)
   if uye is None or not uye.verify_password(sifre):
-    return None
+    return {'error': True, 'msg': 'Kullacıcı adı ve/veya şifre hatalı'}  
   else:
     login_user(uye, remember= False)
-  
-  return {'error': error, 'msg': msg}
-
+    return {'error': False, 'msg': 'Login oldunuz', 'data': {'uye': uye.get_id}} 
 
 @main.route('/logout')
 def logout():

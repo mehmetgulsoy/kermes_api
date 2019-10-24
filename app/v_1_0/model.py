@@ -15,8 +15,12 @@ class Uye(UserMixin):
 
   @classmethod
   def fromFirmaUye(cls, firma, uye):
-    res = query_db('SELECT * FROM uye WHERE (firma= ? AND uye=?)',(firma,uye),True)    
-    return cls(res['no'],res['sifre'],res['durum'])
+    res = query_db('SELECT * FROM uye WHERE (firma= ? AND uye=?)',(firma,uye),True)
+    if res:     
+      return cls(res['no'],res['sifre'],res['durum'])
+    else:
+      None
+
 
   @classmethod
   def fromNoLoader(cls, no):

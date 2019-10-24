@@ -12,10 +12,10 @@ def index():
 @main.route('/login', methods=["POST","GET"])
 def login():
   if current_user.is_authenticated:
-      return {'error': True, 'msg': 'Uye zaten login!'}   
+      return {'error': False, 'msg': 'Uye zaten login!'}   
 
   rq = request.get_json(force=True,silent=True)
-  if rq['uye'].find('@') == -1:
+  if rq.get('uye',' ') not in '@':
     return {'error': True, 'msg': 'uye@firma formatında olmalı!'}   
 
   uye, firma = str.split(rq['uye'],'@')

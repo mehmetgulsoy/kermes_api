@@ -12,24 +12,27 @@ def index():
 @main.route('/login', methods=["POST","GET"])
 def login():
   if current_user.is_authenticated:
-      return {'error': False, 'msg': 'Uye zaten login!'}   
+      return {'error': False, 'msg': 'Uye zaten login!'},200   
 
-  rq = request.get_json(force=True,silent=True)
-  if rq.get('uye',' ') not in '@':
-    return {'error': True, 'msg': 'uye@firma formatında olmalı!'}   
+  data = request.get_json() 
+  
+  if data['uye'] and data['sifre']: 
+    uye = data.get('uye','')
+    if '@' not in uye:
+      return {'error': True, 'msg': 'uye@firma formatında olmalı!'}, 400   
 
-  uye, firma = str.split(rq['uye'],'@')
-  sifre = rq['sifre']
+    uye, firma = str.split(uye,'@')
+    sifre = data.get('sifre')
 
-  if uye == '' or firma == '' or sifre == '' :
-    return {'error': True, 'msg': 'Kullacıcı adı ve/veya şifre giriniz!'}    
+    if not uye or not firma or not sifre:
+      return {'error': True, 'msg': 'Kullacıcı adı ve/veya şifre giriniz!'},400    
     
-  uye = Uye.fromFirmaUye(firma,uye)
-  if uye is None or not uye.verify_password(sifre):
-    return {'error': True, 'msg': 'Kullacıcı adı ve/veya şifre hatalı'}  
-  else:
-    login_user(uye, remember= False)
-    return {'error': False, 'msg': 'Login oldunuz', 'data': {'uye': uye.get_id}} 
+    uye = Uye.fromFirmaUye(firma,uye)
+    if uye is None or not uye.verify_password(sifre):
+      return {'error': True, 'msg': 'Kullacıcı adı ve/veya şifre hatalı'},400  
+    else:
+      ogin_user(uye, remember= False)
+      return jsonify({'error': False, 'msg': 'Login oldunuz', 'data': {'uye': uye.get_id()}}),200 
 
 @main.route('/logout')
 def logout():

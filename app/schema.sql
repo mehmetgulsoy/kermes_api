@@ -14,7 +14,7 @@ CREATE UNIQUE INDEX idx_firma_uye ON uye (firma,uye);
 INSERT INTO uye (no,firma,uye,sifre,gorev,yetki) VALUES        
                 (null, 'BTY', 'MEHMET', '$2b$12$GK3Dv0aApEg39erF4WQ1kuzkIn4qeLoobXjbIBVX4lXeoPKdsc8kO','GARSON','ADMIN'),
                 (null, 'RTY', 'METIN', '$2b$12$GK3Dv0aApEg39erF4WQ1kuzkIn4qeLoobXjbIBVX4lXeoPKdsc8kO','MUHASİP','ADMIN'),
-                (null,'öty2','Mehmet Gülsoy','$2b$12$GK3Dv0aApEg39erF4WQ1kuzkIn4qeLoobXjbIBVX4lXeoPKdsc8kO','GARSON','ADMIN');    
+                (null,'BTY','mehmet','$2b$12$GK3Dv0aApEg39erF4WQ1kuzkIn4qeLoobXjbIBVX4lXeoPKdsc8kO','GARSON','ADMIN');    
 
 DROP TABLE IF EXISTS firma;
 CREATE TABLE firma (  

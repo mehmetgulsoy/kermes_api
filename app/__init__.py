@@ -14,7 +14,7 @@ def create_app(config_class=Config):
   """Flask uygulaması oluşturur."""
   app = Flask(__name__)
   app.config.from_object(config_class)
-  CORS(app)
+  CORS(app, supports_credentials=True)
   bcrypt.init_app(app)
   login_manager.init_app(app) 
  

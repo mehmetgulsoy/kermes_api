@@ -29,6 +29,7 @@ class Uye(UserMixin):
       uye = cls(res['no'],res['sifre'],res['durum']) 
       uye.is_authenticated = True 
       uye.is_anonymous     = False
+      uye.firma            = res['firma']
       return uye 
     else:
       None

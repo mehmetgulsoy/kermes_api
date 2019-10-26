@@ -34,6 +34,7 @@ def login():
 @main.route('/logout')
 def logout():
   logout_user()
+<<<<<<< HEAD
   return success_request() 
 
 
@@ -65,3 +66,6 @@ def urun_ekle():
     login_user(uye)
     data = { 'uye': uye.get_id() }
     return success_request('Login oldunuz',data)
+=======
+  return success_request() 
+>>>>>>> 5e2e2145aef18f9ccb766d1ab3e7042b394c5e37

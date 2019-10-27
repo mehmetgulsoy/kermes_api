@@ -12,9 +12,9 @@ CREATE TABLE uye (
 CREATE UNIQUE INDEX idx_firma_uye ON uye (firma,uye);
 
 INSERT INTO uye (no,firma,uye,sifre,gorev,yetki) VALUES        
-                (null, 'BTY', 'MEHMET', '$2b$12$GK3Dv0aApEg39erF4WQ1kuzkIn4qeLoobXjbIBVX4lXeoPKdsc8kO','GARSON','ADMIN'),
-                (null, 'RTY', 'METIN', '$2b$12$GK3Dv0aApEg39erF4WQ1kuzkIn4qeLoobXjbIBVX4lXeoPKdsc8kO','MUHASİP','ADMIN'),
-                (null,'BTY','mehmet','$2b$12$GK3Dv0aApEg39erF4WQ1kuzkIn4qeLoobXjbIBVX4lXeoPKdsc8kO','GARSON','ADMIN');    
+                (null, 'bty', 'mehmet', '$2b$12$GK3Dv0aApEg39erF4WQ1kuzkIn4qeLoobXjbIBVX4lXeoPKdsc8kO','GARSON','ADMIN'),
+                (null, 'bty', 'metin', '$2b$12$GK3Dv0aApEg39erF4WQ1kuzkIn4qeLoobXjbIBVX4lXeoPKdsc8kO','MUHASİP','ADMIN'),
+                (null,'öty','mehmet','$2b$12$GK3Dv0aApEg39erF4WQ1kuzkIn4qeLoobXjbIBVX4lXeoPKdsc8kO','GARSON','ADMIN');    
 
 DROP TABLE IF EXISTS firma;
 CREATE TABLE firma (  
@@ -28,8 +28,19 @@ CREATE TABLE firma (
   ols_trh TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 INSERT INTO firma (firma,unvan,telefon,eposta) VALUES 
-  ('BTY', 'BEYKOZ TALEBE YURDU', '02164333009','info@bty.com'),
-  ('RTY', 'RIVA TALEBE YURDU', '02164333008','info@rty.com');
+  ('bty', 'BEYKOZ TALEBE YURDU', '02164333009','info@bty.com'),
+  ('oty', 'RIVA TALEBE YURDU', '02164333008','info@rty.com');
+
+DROP TABLE IF EXISTS firma_data;
+CREATE TABLE firma_data (  
+  firma TEXT  NOT NULL,
+  anahtar TEXT  NOT NULL,
+  deger TEXT NOT NULL,
+  gnc_trh TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  ols_trh TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(firma,anahtar)
+);
+insert into firma_data (firma,anahtar,deger) VALUES ('bty','menu_katagori',"['Çorbalar','Ara Sıcaklar','İkramlarımız','Dönerler','Kebaplar','Pideler','Tatlılar','İçecekler']")
 
 DROP TABLE IF EXISTS urun;
 CREATE TABLE urun (   
@@ -60,7 +71,6 @@ CREATE TABLE siparis (
   ols_trh TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(firma,siparis,satir) 
 );
-
 INSERT INTO siparis (firma,siparis,satir,urun,orj_mkt,gnc_mkt,fiyat) VALUES 
   ('BTY','1','1', 'ADANA', 5, 5,13),
   ('BTY','1','2', 'TAVUK ŞİŞ', 3, 2,10);

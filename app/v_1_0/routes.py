@@ -44,6 +44,14 @@ def menu_item():
   data = query_db('select * from "urun" where firma=?',(firma,),True) or {}
   return success_request('urun listesi',data)
 
+@main.route('/urun_katagori', methods=["GET"])
+@login_required
+def urun_katagori():
+  #https://stackoverflow.com/questions/3286525/return-sql-table-as-json-in-python  
+  firma = current_user.firma
+  cur = query_db("select deger from firma_data where anahtar='menu_katagori' and  firma=?",(firma,),True) or {}  
+  return success_request('urun katagori listesi',dict(cur))  
+
 @main.route('/urun_ekle', methods=["POST"])
 @login_required
 def urun_ekle():

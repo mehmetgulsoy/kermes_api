@@ -16,7 +16,6 @@ def execute_db(query, args=()):
   con = get_db()
   with con:     
     con.execute(query, args)
-  
 
 def get_db():
   """Db bağlantısını geri döner."""

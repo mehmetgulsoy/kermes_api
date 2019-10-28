@@ -40,13 +40,15 @@ CREATE TABLE firma_data (
   ols_trh TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(firma,anahtar)
 );
-insert into firma_data (firma,anahtar,deger) VALUES ('bty','menu_katagori',"['Çorbalar','Ara Sıcaklar','İkramlarımız','Dönerler','Kebaplar','Pideler','Tatlılar','İçecekler']")
+insert into firma_data (firma,anahtar,deger) VALUES 
+  ('bty','menu_katagori','Çorbalar,Ara Sıcaklar,İkramlarımız,Dönerler,Kebaplar,Pideler,Tatlılar,İçecekler');
 
 DROP TABLE IF EXISTS urun;
 CREATE TABLE urun (   
   firma TEXT  NOT NULL,
   urun TEXT  NOT NULL,  
   aciklama TEXT NOT NULL,
+  katagori TEXT NOT NULL,
   fiyat NUMERIC NOT NULL DEFAULT 0,
   miktar NUMERIC NOT NULL DEFAULT 0, 
   stok_takip NUMERIC NOT NULL DEFAULT 0,
@@ -54,9 +56,13 @@ CREATE TABLE urun (
   ols_trh TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(firma,urun)  
 );
-INSERT INTO urun (firma,urun,aciklama,fiyat,miktar) VALUES 
-                  ('BTY', 'ADANA', 'ACILI ADANA DURUM',13,10),
-                  ('BTY', 'TVKŞIŞ', 'TAVUK ŞİŞ',13,10);
+INSERT INTO urun (firma,urun,aciklama,fiyat,miktar,katagori) VALUES 
+                  ('BTY', 'ADANA', 'ACILI ADANA DURUM',13,10,'Kebaplar'),
+                  ('BTY', 'TVKŞIŞ', 'TAVUK ŞİŞ',13,10,'Kebaplar');
+
+INSERT INTO "URUN" (firma,urun,aciklama,katagori,fiyat,miktar,stok_takip,durum) VALUES 
+                  ('bty','Urfa','Urfa Kebap yeme','Kebaplar',15,0,0,0);
+
 
 DROP TABLE IF EXISTS siparis;
 CREATE TABLE siparis (

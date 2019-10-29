@@ -57,6 +57,23 @@ def urun_katagori():
   cur = query_db("select deger as katagori from firma_data where anahtar='menu_katagori' and  firma=?",(firma,),True) or {}  
   return success_request('urun katagori listesi',dict(cur))  
 
+@main.route('/katagori_ekle', methods=["POST"])
+@login_required
+def katagori_ekle(): 
+  data = request.get_json(silent=True) or {}
+  if not isinstance(data, (list,)):
+    bad_request('katagori zorunlu alandır!')  
+  
+  firma = current_user.firma
+  try:
+    data = ','.join(data)
+    execute_db("""UPDATE "FIRMA_DATA" SET deger = ? 
+    WHERE (firma=? AND anahtar='menu_katagori')""",(data, firma)) 
+    return success_request('Katagori eklendi.')
+  except:
+    logging.error(traceback.format_exc())
+    return bad_request('Hata oluştu.')  
+
 @main.route('/urun_ekle', methods=["POST"])
 @login_required
 def urun_ekle():  

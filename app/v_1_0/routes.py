@@ -43,10 +43,17 @@ def logout():
 
 @main.route('/urun', methods=["GET"])
 @login_required
-def menu_item():  
+def menu_items():  
   firma = current_user.firma
-  data = query_db('select * from "urun" where firma=?',(firma,),True) or {}
-  return success_request('urun listesi',data)
+  data = query_db('select * from "urun" where firma=?',(firma,)) or {}
+  return success_request('Urun listesi',[dict(ixd) for ixd in data])
+ 
+@main.route('/urun/<id>', methods=["GET"])
+@login_required
+def menu_item(id):  
+  firma = current_user.firma
+  data = query_db('select * from "urun" where firma=? and urun= ?',(firma,id), True) or {}
+  return success_request('Urun bilgisi.',dict(data))  
 
 
 @main.route('/urun_katagori', methods=["GET"])

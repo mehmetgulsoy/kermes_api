@@ -109,3 +109,62 @@ def urun_ekle():
   except : 
     logging.error(traceback.format_exc())
     return bad_request('İşlem başarısız.')
+
+
+@main.route('/personeller', methods=["GET"])
+@login_required
+def personeller():  
+  firma = current_user.firma
+  data = query_db('select * from "uye" where firma=?',(firma,)) or {}
+  return success_request('Personel listesi',[dict(ixd) for ixd in data])
+ 
+@main.route('/personel/<id>', methods=["GET"])
+@login_required
+def personel(id):  
+  firma = current_user.firma
+  data = query_db('select * from "uye" where firma=? and uye= ?',(firma,id), True) or {}
+  return success_request('Personel bilgisi.',dict(data))  
+
+@main.route('/personel', methods=["POST"])
+@login_required
+def personel_ekle():  
+  firma = current_user.firma
+  data = request.get_json(silent=True) or {}
+  if 'uye' not in data or 'sifre' not in data or 'gorev' not in data or 'yetki' not in data :     
+    return bad_request('uye, sifre, gorev  ve yetki zorunlu alandır!') 
+    
+  try:     
+    uye = Uye(durum='A', no=None, firma = firma, **data)
+    uye.uye_ekle() 
+    return success_request('Personel eklendi.')
+  except : 
+    logging.error(traceback.format_exc())
+    return bad_request('İşlem başarısız.')     
+
+@main.route('/personel', methods=["PUT"])
+@login_required
+def personel_gnc():  
+  firma = current_user.firma
+  data = request.get_json(silent=True) or {}
+  if 'uye' not in data:     
+    return bad_request('uye zorunlu alandır!') 
+
+  uye = Uye.fromFirmaUye(firma, data['uye'])
+
+    
+  try: 
+    return success_request('Personel eklendi.')
+  except sqlite3.IntegrityError:
+    execute_db("""UPDATE "URUN" SET aciklama=?,katagori=?,fiyat=?,miktar=?,stok_takip=?,durum=? 
+                  WHERE (firma=? AND urun=?)""")  
+    return success_request('Personel güncellendi.')
+  except : 
+    logging.error(traceback.format_exc())
+    return bad_request('İşlem başarısız.')    
+
+@main.route('/personel2', methods=["GET"])
+@login_required
+def personel_gnc2():
+  firma = current_user.firma
+  uye = Uye.fromFirmaUye2(firma,'mehmet')
+  return uye.uye_gnc(**uye.to_dict())  
